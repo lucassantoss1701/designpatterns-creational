@@ -1,38 +1,28 @@
 package designpatterns;
 
-import designpatterns.factorymethod.BikeTransport;
-import designpatterns.factorymethod.CarTransport;
-import designpatterns.factorymethod.MotorcycleTransport;
-import designpatterns.factorymethod.Transport;
-import designpatterns.factorymethod.vehicles.Bike;
+import designpatterns.abstractfactory.app.Application;
+import designpatterns.abstractfactory.factories.ITransportFactory;
+import designpatterns.abstractfactory.factories.NineNineTransport;
+import designpatterns.abstractfactory.factories.UberTransport;
 
 public class Main {
-    private static Transport transport;
+    public static Application configureApp(){
+        ITransportFactory factory;
+
+        String company = "uber";
+
+        if("uber".equals(company)){
+            factory = new UberTransport();
+        }else{
+            factory = new NineNineTransport();
+        }
+
+        return new Application(factory);
+    }
 
     public static void main(String[] args) {
-        configure(args[0]);
-        if(transport != null){
-            runTransport();
-        }
+        Application app = configureApp();
+        app.startRoute();
     }
 
-    private static void runTransport() {
-        transport.startTransport();
-    }
-
-    private static void configure(String type) {
-        switch (type){
-            case "uber":
-                transport = new CarTransport();
-                break;
-            case "log":
-                transport = new MotorcycleTransport();
-                break;
-            case "bike":
-                transport = new BikeTransport();
-                break;
-            default:
-                System.out.println("Escolha um tipo de serviço.");
-        }
-    }
 }
